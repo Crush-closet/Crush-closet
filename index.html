@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RichKid-boutique | Luxury Collection</title>
+    <style>
+        :root { --gold: #D4AF37; --magenta: #C70066; --black: #111; --white: #fff; }
+        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+        body { font-family: 'Helvetica Neue', Arial, sans-serif; background: var(--white); color: var(--black); padding-bottom: 150px; }
+        
+        /* BANNER & INNER CIRCLE */
+        .slideshow-container { width: 100%; position: relative; background-color: #fff; line-height: 0; }
+        .slide { width: 100%; height: auto; display: none; object-fit: contain; }
+        .inner-circle { background: var(--black); color: var(--gold); padding: 25px 20px; text-align: center; border-top: 3px solid var(--gold); }
+        .inner-circle h3 { margin-bottom: 5px; font-size: 18px; letter-spacing: 2px; text-transform: uppercase; }
+        .handle { color: var(--magenta); font-weight: bold; }
+        .insta-btn { display: inline-block; margin-top: 15px; background: var(--gold); color: #000; padding: 12px 35px; text-decoration: none; font-weight: bold; border-radius: 50px; text-transform: uppercase; font-size: 12px; }
+
+        /* SEARCH SECTION */
+        .search-section { padding: 20px; text-align: center; background: #f9f9f9; border-bottom: 1px solid #eee; }
+        .search-trigger { width: 90%; padding: 15px; background: var(--white); border: 1px solid #ddd; border-radius: 8px; color: #888; font-size: 14px; text-align: left; cursor: pointer; display: flex; justify-content: space-between; align-items: center; margin: 0 auto; }
+        
+        /* OVERLAYS */
+        .category-overlay, .upsell-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 2000; display: none; flex-direction: column; align-items: center; justify-content: center; color: white; text-align: center; }
+        .category-item { padding: 15px; font-size: 24px; text-transform: uppercase; letter-spacing: 2px; cursor: pointer; }
+        .close-overlay { position: absolute; top: 20px; right: 25px; font-size: 35px; cursor: pointer; }
+
+        /* UPSELL BOX STYLE */
+        .upsell-card { background: white; color: black; width: 85%; max-width: 400px; padding: 20px; border-radius: 15px; position: relative; }
+        .upsell-img { width: 120px; height: 120px; object-fit: contain; margin-bottom: 15px; }
+        .upsell-text { font-size: 14px; margin-bottom: 15px; line-height: 1.4; font-weight: bold; }
+        .upsell-btn { background: var(--magenta); color: white; border: none; padding: 12px 20px; border-radius: 5px; font-weight: bold; cursor: pointer; }
+
+        /* PRODUCT GRID */
+        .product-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 12px; }
+        .product-card { border: 1px solid #f2f2f2; border-radius: 8px; overflow: hidden; display: none; flex-direction: column; background: #fff; }
+        .product-image { width: 100%; height: auto; object-fit: contain; }
+        .product-info { padding: 12px; text-align: center; }
+        .price-tag { color: var(--magenta); font-weight: bold; font-size: 16px; margin-bottom: 10px; }
+        .size-selector { width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 5px; font-size: 11px; }
+        .add-btn { background: var(--black); color: white; border: none; width: 100%; padding: 14px; font-size: 11px; font-weight: bold; text-transform: uppercase; border-radius: 5px; }
+
+        /* FOOTER */
+        .checkout-footer { position: fixed; bottom: 0; left: 0; width: 100%; background: #fff; padding: 15px; border-top: 1px solid #eee; z-index: 1000; text-align: center; }
+        .cart-float { width: 90%; background: var(--gold); color: #000; padding: 18px 0; border-radius: 50px; font-weight: bold; border: none; font-size: 13px; text-transform: uppercase; }
+    </style>
+</head>
+<body>
+
+    <div class="slideshow-container" id="slideshow">
+        <img class="slide" src="hero1.jpg" onerror="this.src='hero1.png';">
+        <img class="slide" src="hero2.jpg" onerror="this.src='hero2.png';">
+    </div>
+
+    <div class="inner-circle">
+        <h3>JOIN THE INNER CIRCLE</h3>
+        <p>Follow <span class="handle">@richKid_boutique.cs</span></p>
+        <a href="https://instagram.com/richKid_boutique.cs" class="insta-btn" target="_blank">Follow Instagram</a>
+    </div>
+
+    <div class="search-section">
+        <div class="search-trigger" onclick="toggleSearch(true)">
+            <span>Explore Collections...</span>
+            <span>🔍</span>
+        </div>
+    </div>
+
+    <!-- Category Menu -->
+    <div class="category-overlay" id="categoryMenu">
+        <span class="close-overlay" onclick="toggleSearch(false)">✕</span>
+        <h2>COLLECTIONS</h2>
+        <ul class="category-list">
+            <li class="category-item" onclick="selectCat('bikini')">Bikinis</li>
+            <li class="category-item" onclick="selectCat('threepiece')">Three Piece</li>
+            <li class="category-item" onclick="selectCat('dress')">Dresses</li>
+            <li class="category-item" onclick="selectCat('cologne')">Cologne</li>
+            <li class="category-item" onclick="selectCat('bracelet')">Bracelets</li>
+            <li class="category-item" onclick="selectCat('lipstick')">Lipstick</li>
+        </ul>
+    </div>
+
+    <!-- Upsell / Suggestion Pop-up -->
+    <div class="upsell-overlay" id="upsellOverlay">
+        <div class="upsell-card">
+            <span class="close-overlay" style="color:black; font-size: 25px; top: 10px; right: 15px;" onclick="closeUpsell()">✕</span>
+            <img id="upsellImg" src="" class="upsell-img">
+            <p class="upsell-text" id="upsellText"></p>
+            <button class="upsell-btn" onclick="closeUpsell()">Keep Shopping</button>
+        </div>
+    </div>
+
+    <div id="product-display" class="product-grid"></div>
+
+    <div class="checkout-footer">
+        <button class="cart-float" onclick="checkoutWhatsApp()">
+            Checkout Bag (<span id="cart-count">0</span>)
+        </button>
+    </div>
+
+    <script>
+        let cart = JSON.parse(localStorage.getItem('rk_cart')) || [];
+        let slideIndex = 0;
+
+        const inventory = {
+            'bikini': { prefix: 'bikini', label: 'Bikini', prices: ["5,500"], sizes: ["S", "M", "L"], suggests: "lipstick", text: "This lipstick fits perfectly with your two piece bath suit! 💄" },
+            'dress': { prefix: 'dress', label: 'Dress', prices: ["7,500"], sizes: ["S", "M", "L"], suggests: "bracelet", text: "This bracelet goes beautifully with your dress! ✨" },
+            'threepiece': { prefix: 'threepiece', label: '3-Piece', prices: ["8,500"], sizes: ["S", "M", "L"] },
+            'cologne': { prefix: 'cologne', label: 'Cologne', prices: ["12,000"], sizes: ["Standard"] },
+            'bracelet': { prefix: 'bracelet', label: 'Bracelet', prices: ["2,500"], sizes: ["One Size"] },
+            'lipstick': { prefix: 'lipstick', label: 'Lipstick', prices: ["1,800"], sizes: ["Standard"] }
+        };
+
+        function toggleSearch(show) { document.getElementById('categoryMenu').style.display = show ? 'flex' : 'none'; }
+        
+        function selectCat(cat) { toggleSearch(false); showCategory(cat); }
+
+        function showCategory(category) {
+            const container = document.getElementById('product-display');
+            container.innerHTML = '';
+            const data = inventory[category];
+            for (let i = 0; i < data.prices.length; i++) {
+                const itemNum = i + 1;
+                const card = document.createElement('div');
+                card.className = 'product-card';
+                card.innerHTML = `
+                    <img src="${data.prefix}${itemNum}.png" class="product-image" onerror="this.src='${data.prefix}${itemNum}.jpg'; this.onerror=function(){this.closest('.product-card').remove();}" onload="this.closest('.product-card').style.display='flex'">
+                    <div class="product-info">
+                        <div class="price-tag">$${data.prices[i]} JMD</div>
+                        <select class="size-selector" id="size-${category}-${itemNum}"><option value="">Size</option>${data.sizes.map(s => `<option value="${s}">${s}</option>`).join('')}</select>
+                        <button class="add-btn" onclick="addToCart('${data.label} #${itemNum}', '${data.prices[i]}', '${category}', ${itemNum})">Add to Bag</button>
+                    </div>`;
+                container.appendChild(card);
+            }
+        }
+
+        function addToCart(item, price, category, index) {
+            const sizeVal = document.getElementById(`size-${category}-${index}`).value;
+            if(!sizeVal) return alert("Select size!");
+            cart.push(`${item} (Size: ${sizeVal}) - $${price}`);
+            localStorage.setItem('rk_cart', JSON.stringify(cart));
+            updateCartUI();
+
+            // Show Suggestion logic
+            const data = inventory[category];
+            if(data.suggests) {
+                document.getElementById('upsellImg').src = data.suggests + "1.png";
+                document.getElementById('upsellText').innerText = data.text;
+                document.getElementById('upsellOverlay').style.display = 'flex';
+            }
+        }
+
+        function closeUpsell() { document.getElementById('upsellOverlay').style.display = 'none'; }
+        function updateCartUI() { document.getElementById('cart-count').innerText = cart.length; }
+        function checkoutWhatsApp() {
+            if(cart.length === 0) return alert("Bag is empty!");
+            window.open("https://wa.me/18763047407?text=" + encodeURIComponent("New Order: \n\n" + cart.join("\n")));
+        }
+
+        window.onload = () => {
+            let slides = document.querySelectorAll(".slide");
+            setInterval(() => { slides.forEach(s => s.style.display = "none"); slideIndex = (slideIndex + 1) % slides.length; slides[slideIndex].style.display = "block"; }, 4000);
+            showCategory('bikini');
+            updateCartUI();
+        };
+    </script>
+</body>
+</html>
